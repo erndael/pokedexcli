@@ -63,17 +63,3 @@ func startRepl() {
 		}
 	}
 }
-
-func commandExit() error {
-	fmt.Println("Closing the Pokedex... Goodbye!")
-	os.Exit(0)
-	return nil
-}
-
-func commandHelp() error {
-	fmt.Printf("Welcome to the Pokedex!\nUsage:\n\n")
-	for name, command := range getCommandRegistry() {
-		fmt.Printf("%s: %s\n", name, command.description)
-	}
-	return nil
-}
