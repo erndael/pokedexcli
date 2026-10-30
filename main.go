@@ -13,6 +13,11 @@ func main() {
 				description: "Displays a help message",
 				callback:    commandHelp,
 			},
+			"map": {
+				name:        "map",
+				description: "Displays the 20 next locations",
+				callback:    commandMap,
+			},
 		},
 	}
 
