@@ -1,5 +1,20 @@
 package main
 
 func main() {
-	startRepl()
+	config := config{
+		commandRegistry: map[string]cliCommand{
+			"exit": {
+				name:        "exit",
+				description: "Exit the Pokedex",
+				callback:    commandExit,
+			},
+			"help": {
+				name:        "help",
+				description: "Displays a help message",
+				callback:    commandHelp,
+			},
+		},
+	}
+
+	startRepl(&config)
 }
