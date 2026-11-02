@@ -5,7 +5,7 @@ import (
 )
 
 func fetchAndPrintLocations(config *config, url *string) error {
-	locations, err := config.pokeapiClient.GetLocationAreas(url)
+	locations, err := config.pokeapiClient.ListLocationAreas(url)
 	if err != nil {
 		return err
 	}
@@ -20,11 +20,11 @@ func fetchAndPrintLocations(config *config, url *string) error {
 	return nil
 }
 
-func commandMap(config *config) error {
+func commandMap(config *config, args ...string) error {
 	return fetchAndPrintLocations(config, config.nextLocationURL)
 }
 
-func commandMapBack(config *config) error {
+func commandMapBack(config *config, args ...string) error {
 	if config.previousLocationURL == nil {
 		fmt.Println("you're on the first page")
 		return nil
