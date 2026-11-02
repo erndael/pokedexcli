@@ -3,7 +3,6 @@ package pokeapi
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -19,19 +18,31 @@ type LocationAreaResponse struct {
 	Results  []LocationArea `json:"results"`
 }
 
-func Test() {
-	res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
+func (c *Client) GetLocationAreas(url *string) (LocationAreaResponse, error) {
+	locationURL := baseURL + "/location-area/"
+	if url != nil {
+		locationURL = *url
+	}
+
+	req, err := http.NewRequest(http.MethodGet, locationURL, nil)
 	if err != nil {
-		return
+		return LocationAreaResponse{}, err
+	}
+
+	res, err := c.httpClient.Do(req)
+	if err != nil {
+		return LocationAreaResponse{}, fmt.Errorf("could not get locations: %w", err)
 	}
 	defer res.Body.Close()
 
-	var locations LocationAreaResponse
-	if err := json.NewDecoder(res.Body).Decode(&locations); err != nil {
-		log.Fatal(err)
+	if res.StatusCode != http.StatusOK {
+		return LocationAreaResponse{}, fmt.Errorf("%s: %s", locationURL, res.Status)
 	}
 
-	for _, location := range locations.Results {
-		fmt.Println(location.Name)
+	var locations LocationAreaResponse
+	if err := json.NewDecoder(res.Body).Decode(&locations); err != nil {
+		return LocationAreaResponse{}, fmt.Errorf("could not decode response: %w", err)
 	}
+
+	return locations, nil
 }
